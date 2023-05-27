@@ -20,9 +20,11 @@ class CampaignService
      * CampaignService constructor.
      *
      * @param array $campaigns The initial list of campaigns
+     * @param CampaignValidator $validator The campaign validator object
      */
     public function __construct(
         private array $campaigns = [],
+        private CampaignValidator $validator = new CampaignValidator(), 
     )
     {
     }
@@ -48,6 +50,14 @@ class CampaignService
     public function run(): void
     {
         foreach ($this->campaigns as $index => $campaign) {
+            if (
+                !$this->validator->validateBlogPosts($campaign) ||
+                !$this->validator->validateOverlap($this->startedCampaigns, $campaign)
+            ) {
+                $this->removeCampaign($index);
+                continue;
+            }
+
             $this->startCampaign($campaign);
         }
     }

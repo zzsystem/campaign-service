@@ -68,4 +68,68 @@ class Campaign
     {
         return count($this->products) > 0;
     }
+
+    /**
+     * Check if the campaign includes any weekend days.
+     *
+     * @return bool Returns true if the campaign includes weekend days, false otherwise
+     */
+    public function includesWeekend(): bool
+    {
+        return $this->startDate->diff($this->endDate)->format('%a') + $this->startDate->format('w') > 6;
+    }
+
+    /**
+     * Get the start date of the campaign.
+     *
+     * @return \DateTime The start date of the campaign
+     */
+    public function getStartDate(): \DateTime
+    {
+        return $this->startDate;
+    }
+
+    /**
+     * Get the end date of the campaign.
+     *
+     * @return \DateTime The end date of the campaign
+     */
+    public function getEndDate(): \DateTime
+    {
+        return $this->endDate;
+    }
+
+    /**
+     * Get the IDs of the products associated with the campaign.
+     *
+     * @return array The list of product IDs
+     */
+    public function getProductIds(): array
+    {
+        return array_map(fn(Product $product) => $product->getId(), $this->products);
+    }
+
+    /**
+     * Get the IDs of the blog posts associated with the campaign.
+     *
+     * @return array The list of blog post IDs
+     */
+    public function getBlogPostIds(): array
+    {
+        return array_map(fn(BlogPost $blogPost) => $blogPost->getId(), $this->blogPosts);
+    }
+
+    /**
+     * Check if the campaign has any overlapping elements with another campaign.
+     *
+     * @param Campaign $otherCampaign The other campaign to check against
+     * @return bool Returns true if there are any overlapping elements, false otherwise
+     */
+    public function hasOverlappingElements(Campaign $otherCampaign): bool
+    {
+        $sharedProducts = array_intersect($this->getProductIds(), $otherCampaign->getProductIds());
+        $sharedBlogPosts = array_intersect($this->getBlogPostIds(), $otherCampaign->getBlogPostIds());
+
+        return !empty($sharedProducts) || !empty($sharedBlogPosts);
+    }
 }
