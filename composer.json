@@ -1,0 +1,15 @@
+{
+    "name": "zzsys/campaign-service",
+    "autoload": {
+        "psr-4": {
+            "CampaignService\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Madari Zoltán",
+            "email": "zoltan.madari@zzsys.hu"
+        }
+    ],
+    "require": {}
+}
