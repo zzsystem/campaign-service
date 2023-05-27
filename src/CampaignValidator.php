@@ -36,7 +36,7 @@ class CampaignValidator
     public function validateOverlap(array $startedCampaigns, Campaign $campaign): bool
     {
         if ($matchedCampaign = $this->hasAnotherCampaignThatDate($campaign, $startedCampaigns)) {
-            return $campaign->hasOverlappingElements($matchedCampaign);
+            return !$campaign->hasOverlappingElements($matchedCampaign);
         }
 
         return true;
